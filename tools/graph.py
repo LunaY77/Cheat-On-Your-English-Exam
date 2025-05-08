@@ -28,16 +28,20 @@ async def analyze_content(state: WritingState) -> dict[str, str]:
         return {"behavior": "rewrite", "content": prompt}
     elif last_line == "generate":
         return {"behavior": "generate", "content": prompt}
+    elif last_line == "cite":
+        return {"behavior": "cite", "content": prompt}
     else:
         return {"behavior": "topic", "content": state.content}
 
 
-def route_behavior(state: WritingState) -> Literal["write_introduction", "rewrite_content", "generate_content"]:
+def route_behavior(state: WritingState) -> Literal["write_introduction", "rewrite_content", "generate_content", "cite_content"]:
     """Route to the appropriate node based on behavior."""
     if state.behavior == "topic":
         return "write_introduction"
     elif state.behavior == "rewrite":
         return "rewrite_content"
+    elif state.behavior == "cite":
+        return "cite_content"
     else:
         return "generate_content"
 
@@ -78,12 +82,29 @@ async def generate_content(state: WritingState) -> dict[str, str]:
     return {"response": response.content}
 
 
+async def cite_content(state: WritingState) -> dict[str, str]:
+    """Paraphrase the content and add Harvard style citation."""
+    model = load_chat_model()
+    messages = [
+        {"role": "system",
+         "content": """You are a professional academic writer. Your task is to:
+            1. Paraphrase the given text in your own words while maintaining the original meaning
+            2. Add a Harvard style citation at the end of the paraphrased text
+            3. Keep the paraphrased text concise and clear
+            4. Format the citation as: (Author's Last Name, Year)"""},
+        {"role": "user", "content": state.content}
+    ]
+    response = await model.ainvoke(messages)
+    return {"response": response.content}
+
+
 # Define the graph
 builder = StateGraph(WritingState)
 builder.add_node("analyze_content", analyze_content)
 builder.add_node("write_introduction", write_introduction)
 builder.add_node("rewrite_content", rewrite_content)
 builder.add_node("generate_content", generate_content)
+builder.add_node("cite_content", cite_content)
 
 # Add edges
 builder.add_edge(START, "analyze_content")
@@ -93,12 +114,14 @@ builder.add_conditional_edges(
     {
         "write_introduction": "write_introduction",
         "rewrite_content": "rewrite_content",
-        "generate_content": "generate_content"
+        "generate_content": "generate_content",
+        "cite_content": "cite_content"
     }
 )
 builder.add_edge("write_introduction", END)
 builder.add_edge("rewrite_content", END)
 builder.add_edge("generate_content", END)
+builder.add_edge("cite_content", END)
 
 # Compile the graph
 graph = builder.compile()

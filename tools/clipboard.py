@@ -53,6 +53,11 @@ def parse_clipboard(content: str) -> Dict[str, str]:
             "content": prompt,
             "behavior": "generate"
         }
+    elif last_line == "cite":
+        return {
+            "content": prompt,
+            "behavior": "cite"
+        }
     else:
         return {
             "content": prompt,

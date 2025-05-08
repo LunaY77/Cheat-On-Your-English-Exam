@@ -46,6 +46,7 @@ async def main():
     print("- topic - 根据话题生成作文")
     print("- rewrite - 重写作文")
     print("- generate - 生成新内容")
+    print("- cite - 改写引用并添加哈佛引用格式")
     
     # 设置UI
     app, _ = setup_ui()

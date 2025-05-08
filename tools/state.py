@@ -10,6 +10,6 @@ class WritingState:
     """The content from clipboard."""
     content: str
     """The behavior type determined from the last line."""
-    behavior: Literal["topic", "rewrite", "generate"]
+    behavior: Literal["topic", "rewrite", "generate", "cite"]
     """The generated response."""
     response: str = field(default="")
