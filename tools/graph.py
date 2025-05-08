@@ -29,7 +29,7 @@ async def write_introduction(state: WritingState) -> dict[str, str]:
     model = load_chat_model()
     messages = [
         {"role": "system",
-         "content": "You are a professional English writer. Write a concise and engaging introduction paragraph for the given topic. Keep it under 100 words."},
+         "content": "你是一个雅思写作 7 分水平的学生, 请保证你的词汇、语法、句型水平不要过于高级. Now you are writing a academic essay on an IELTS test. Write a concise and engaging introduction paragraph for the given topic. Keep it under 100 words but above 60 words."},
         {"role": "user", "content": f"Topic: {state.content}"}
     ]
     response = await model.ainvoke(messages)
@@ -41,7 +41,7 @@ async def rewrite_content(state: WritingState) -> dict[str, str]:
     model = load_chat_model()
     messages = [
         {"role": "system",
-         "content": "You are a professional English editor. Improve the writing quality of the given text without adding new content or changing the meaning. Focus on grammar, word choice, and sentence structure."},
+         "content": "你是一个雅思写作 7 分水平的学生, 请保证你的词汇、语法、句型水平不要过于高级. Now you are writing a academic essay on an IELTS test. Improve the writing quality of the given text without adding new content or changing the meaning. Focus on grammar, word choice, and sentence structure."},
         {"role": "user", "content": state.content}
     ]
     response = await model.ainvoke(messages)
@@ -53,7 +53,7 @@ async def generate_content(state: WritingState) -> dict[str, str]:
     model = load_chat_model()
     messages = [
         {"role": "system",
-         "content": "You are a professional English writer. Add 1-2 lines of content that naturally follows the given text. Keep it concise and relevant."},
+         "content": "你是一个雅思写作 7 分水平的学生, 请保证你的词汇、语法、句型水平不要过于高级. Now you are writing a academic essay on an IELTS test. Add 1-2 lines of content that naturally follows the given text. Keep it concise and relevant."},
         {"role": "user", "content": state.content}
     ]
     response = await model.ainvoke(messages)
@@ -65,7 +65,7 @@ async def cite_content(state: WritingState) -> dict[str, str]:
     model = load_chat_model()
     messages = [
         {"role": "system",
-         "content": """You are a professional academic writer. Your task is to:
+         "content": """你是一个雅思写作 7 分水平的学生, 请保证你的词汇、语法、句型水平不要过于高级. Now you are writing a academic essay on an IELTS test. Your task is to:
             1. Paraphrase the given text in your own words while maintaining the original meaning
             2. Add a Harvard style citation at the end of the paraphrased text
             3. Keep the paraphrased text concise and clear
@@ -80,7 +80,7 @@ async def conclude_content(state: WritingState) -> dict[str, str]:
     model = load_chat_model()
     messages = [
         {"role": "system",
-         "content": "You are a professional English writer. Write a conclusion about the given article. Keep it under 100 words."},
+         "content": "你是一个雅思写作 7 分水平的学生, 请保证你的词汇、语法、句型水平不要过于高级. Now you are writing a academic essay on an IELTS test. Write a conclusion about the given article. Keep it under 100 words but above 50 words."},
         {"role": "user", "content": f"Topic: {state.content}"}
     ]
     response = await model.ainvoke(messages)

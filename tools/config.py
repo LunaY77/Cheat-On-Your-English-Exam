@@ -29,4 +29,4 @@ if not openai_base_url:
 
 def load_chat_model() -> ChatOpenAI:
     """Load the chat model with configuration."""
-    return ChatOpenAI(model="gpt-3.5-turbo", temperature=0.7, api_key=openai_api_key, base_url=openai_base_url)
+    return ChatOpenAI(model="gpt-4o", temperature=0.7, api_key=openai_api_key, base_url=openai_base_url)
