@@ -90,3 +90,9 @@ OPENAI_BASE_URL=https://c-z0-api-01.hash070.com/v1
     The quick brown fox jumps over the lazy dog.
     cite
    ```
+
+5. 生成结尾总结
+    ```
+     As we grow older, many of us experience changes in our sleep patterns. We may wake up more frequently at night, feel less rested, or even suffer from memory lapses during the day. But is this just a natural part of aging, or is there a deeper connection between sleep quality and cognitive decline? Drawing from the findings in the academic paper titled Age-related Changes in the Cognitive Function of Sleep by Edward F. Pace-Schott and Rebecca M.C. Spencer, I will delve into the ways aging impacts both sleep architecture and cognition—and what this means for our overall brain health.
+     conclude
+    ```

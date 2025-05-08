@@ -1,14 +1,32 @@
 """剪贴板操作模块"""
 
 import hashlib
+import platform
 from typing import Dict, Optional
 
-import pyperclip
+if platform.system() == "Darwin":  # macOS
+    import pyperclip
+elif platform.system() == "Windows":  # Windows
+    import win32clipboard
+    import win32con
+else:
+    raise NotImplementedError(f"不支持的操作系统: {platform.system()}")
 
 def get_clipboard() -> str:
     """获取剪贴板内容"""
     try:
-        return pyperclip.paste()
+        if platform.system() == "Darwin":
+            return pyperclip.paste()
+        elif platform.system() == "Windows":
+            win32clipboard.OpenClipboard()
+            try:
+                if win32clipboard.IsClipboardFormatAvailable(win32con.CF_UNICODETEXT):
+                    data = win32clipboard.GetClipboardData(win32con.CF_UNICODETEXT)
+                else:
+                    data = ""
+            finally:
+                win32clipboard.CloseClipboard()
+            return data
     except Exception as e:
         print(f"获取剪贴板内容失败: {str(e)}")
         return ""
@@ -16,7 +34,15 @@ def get_clipboard() -> str:
 def set_clipboard(content: str) -> bool:
     """设置剪贴板内容"""
     try:
-        pyperclip.copy(content)
+        if platform.system() == "Darwin":
+            pyperclip.copy(content)
+        elif platform.system() == "Windows":
+            win32clipboard.OpenClipboard()
+            try:
+                win32clipboard.EmptyClipboard()
+                win32clipboard.SetClipboardText(content, win32con.CF_UNICODETEXT)
+            finally:
+                win32clipboard.CloseClipboard()
         return True
     except Exception as e:
         print(f"设置剪贴板内容失败: {str(e)}")
@@ -57,6 +83,11 @@ def parse_clipboard(content: str) -> Dict[str, str]:
         return {
             "content": prompt,
             "behavior": "cite"
+        }
+    elif last_line == "conclude":
+        return {
+            "content": prompt,
+            "behavior": "conclude"
         }
     else:
         return {

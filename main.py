@@ -7,7 +7,6 @@ from typing import Dict, Any
 
 from tools.clipboard import get_clipboard, hash_content, parse_clipboard, set_clipboard
 from tools.graph import graph
-from tools.ui import setup_ui
 
 # 全局变量
 running = True
@@ -41,43 +40,40 @@ async def main():
     last_hash = hash_content(get_clipboard())
     
     print("正在监听剪贴板变化...")
-    print("使用菜单栏图标控制暂停/恢复")
+    print("使用 Ctrl+C 退出程序")
     print("行为指令：")
     print("- topic - 根据话题生成作文")
     print("- rewrite - 重写作文")
     print("- generate - 生成新内容")
     print("- cite - 改写引用并添加哈佛引用格式")
-    
-    # 设置UI
-    app, _ = setup_ui()
+    print("- conclude - 生成结尾段落")
     
     try:
         while running:
-            if not app.is_paused:
-                content = get_clipboard()
-                current_hash = hash_content(content)
+            content = get_clipboard()
+            current_hash = hash_content(content)
+            
+            if content.strip() and current_hash != last_hash:
+                print("\n[剪贴板已更新]")
+                print(content)
                 
-                if content.strip() and current_hash != last_hash:
-                    print("\n[剪贴板已更新]")
-                    print(content)
+                try:
+                    # 处理内容
+                    result = await process_content(content)
                     
-                    try:
-                        # 处理内容
-                        result = await process_content(content)
-                        
-                        # 更新剪贴板
-                        if result.get("response"):
-                            if set_clipboard(result["response"]):
-                                last_hash = hash_content(result["response"])
-                                print("\n[生成的响应]")
-                                print(result["response"])
-                            else:
-                                print("\n[错误] 无法更新剪贴板")
-                        
-                        print("\n[处理完成]")
-                        
-                    except Exception as e:
-                        print(f"\n[错误] {str(e)}")
+                    # 更新剪贴板
+                    if result.get("response"):
+                        if set_clipboard(result["response"]):
+                            last_hash = hash_content(result["response"])
+                            print("\n[生成的响应]")
+                            print(result["response"])
+                        else:
+                            print("\n[错误] 无法更新剪贴板")
+                    
+                    print("\n[处理完成]")
+                    
+                except Exception as e:
+                    print(f"\n[错误] {str(e)}")
             
             await asyncio.sleep(1)
     except asyncio.CancelledError:

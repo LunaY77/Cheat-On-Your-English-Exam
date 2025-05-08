@@ -45,7 +45,6 @@ def route_behavior(state: WritingState) -> Literal["write_introduction", "rewrit
     else:
         return "generate_content"
 
-
 async def write_introduction(state: WritingState) -> dict[str, str]:
     """Write an introduction based on the topic."""
     model = load_chat_model()
@@ -97,6 +96,16 @@ async def cite_content(state: WritingState) -> dict[str, str]:
     response = await model.ainvoke(messages)
     return {"response": response.content}
 
+async def conclude_content(state: WritingState) -> dict[str, str]:
+    """Generate a conclusion paragraph for the given topic."""
+    model = load_chat_model()
+    messages = [
+        {"role": "system",
+         "content": "You are a professional English writer. Write a conclusion about the given article. Keep it under 100 words."},
+        {"role": "user", "content": f"Topic: {state.content}"}
+    ]
+    response = await model.ainvoke(messages)
+    return {"response": response.content}
 
 # Define the graph
 builder = StateGraph(WritingState)
@@ -105,6 +114,7 @@ builder.add_node("write_introduction", write_introduction)
 builder.add_node("rewrite_content", rewrite_content)
 builder.add_node("generate_content", generate_content)
 builder.add_node("cite_content", cite_content)
+builder.add_node("conclude_content", conclude_content)
 
 # Add edges
 builder.add_edge(START, "analyze_content")
@@ -115,13 +125,15 @@ builder.add_conditional_edges(
         "write_introduction": "write_introduction",
         "rewrite_content": "rewrite_content",
         "generate_content": "generate_content",
-        "cite_content": "cite_content"
+        "cite_content": "cite_content",
+        "conclude_content": "conclude_content"
     }
 )
 builder.add_edge("write_introduction", END)
 builder.add_edge("rewrite_content", END)
 builder.add_edge("generate_content", END)
 builder.add_edge("cite_content", END)
+builder.add_edge("conclude_content", END)
 
 # Compile the graph
 graph = builder.compile()
