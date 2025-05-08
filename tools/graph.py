@@ -5,34 +5,13 @@ from typing import Literal, TypedDict, cast
 from langgraph.graph import END, START, StateGraph
 
 from tools.config import load_chat_model
-from tools.state import WritingState
+from tools.state import WritingState, InputState
 
 
-async def analyze_content(state: WritingState) -> dict[str, str]:
+async def dispatcher(state: InputState) -> dict[str, str]:
     """Analyze the content and extract the behavior type and prompt."""
-    if state.behavior:
-        print(f"直接下一个，此时的行为：{state.behavior}")
-        return {"behavior": state.behavior, "prompt": state.content}
-    content_lines = state.content.strip().split('\n')
-    if not content_lines:
-        return {"behavior": "topic", "content": ""}
-
-    last_line = content_lines[-1].strip().lower()
-    print(f"最后一行:{last_line}")
-    prompt = '\n'.join(content_lines[:-1]).strip()
-    print(f"prompt:{prompt}")
-
-    if last_line == "topic":
-        return {"behavior": "topic", "content": prompt}
-    elif last_line == "rewrite":
-        return {"behavior": "rewrite", "content": prompt}
-    elif last_line == "generate":
-        return {"behavior": "generate", "content": prompt}
-    elif last_line == "cite":
-        return {"behavior": "cite", "content": prompt}
-    else:
-        return {"behavior": "topic", "content": state.content}
-
+    print(f"此时的行为：{state.behavior}")
+    return {"behavior": state.behavior, "prompt": state.content}
 
 def route_behavior(state: WritingState) -> Literal["write_introduction", "rewrite_content", "generate_content", "cite_content"]:
     """Route to the appropriate node based on behavior."""
@@ -108,8 +87,8 @@ async def conclude_content(state: WritingState) -> dict[str, str]:
     return {"response": response.content}
 
 # Define the graph
-builder = StateGraph(WritingState)
-builder.add_node("analyze_content", analyze_content)
+builder = StateGraph(WritingState, input=InputState)
+builder.add_node("dispatcher", dispatcher)
 builder.add_node("write_introduction", write_introduction)
 builder.add_node("rewrite_content", rewrite_content)
 builder.add_node("generate_content", generate_content)
@@ -117,9 +96,9 @@ builder.add_node("cite_content", cite_content)
 builder.add_node("conclude_content", conclude_content)
 
 # Add edges
-builder.add_edge(START, "analyze_content")
+builder.add_edge(START, "dispatcher")
 builder.add_conditional_edges(
-    "analyze_content",
+    "dispatcher",
     route_behavior,
     {
         "write_introduction": "write_introduction",
