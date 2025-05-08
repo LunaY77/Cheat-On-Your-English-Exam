@@ -1,57 +1,92 @@
-# 英语作文考试助手
+# 英语写作助手
 
-这是一个使用LangGraph框架开发的英语作文辅助工具，专为参加英语作文考试的学生设计。它可以监听系统剪贴板内容，根据用户的指令进行不同类型的英语作文处理。
+这是一个简单易用的英语写作辅助工具，可以帮助你快速生成、改写和润色英语文章。它会在后台监听你的剪贴板，当你复制文本并添加特定指令时，它会自动处理并返回结果。
 
 ## 功能特点
 
-- 监听系统剪贴板变化
-- 多种作文处理模式：
-  - **topic**: 根据给定话题生成作文范例
-  - **rewrite**: 根据要求重写现有作文
-  - **polish**: 润色和修正现有作文
-- 系统托盘显示应用状态
-- 快捷键切换暂停/恢复功能
+- 🎯 智能写作：根据话题生成作文
+- ✍️ 文章改写：用不同风格重写文章
+- 📝 内容扩展：在现有文章基础上添加新内容
+- 📚 引用处理：自动改写引用并添加哈佛引用格式
+- 🖥️ 系统托盘：在菜单栏显示运行状态
+- ⏯️ 暂停/恢复：随时控制程序运行
 
-## 安装与设置
+## 安装步骤
 
-1. 安装所需依赖：
+
+### 1. 安装程序
+
+1. 下载本项目到你的电脑
+2. 打开终端（macOS）或命令提示符（Windows）
+3. 进入项目目录：
+   ```bash
+   cd 项目所在路径
    ```
+4. 安装所需依赖：
+    如果你会用 venv/conda 这种虚拟环境工具，建议你创建一个虚拟环境来安装依赖，不会就直接 pip install 吧()
+
+   ```bash
    pip install -r requirements.txt
    ```
 
-2. 修改`.env.example`文件为`.env`，设置OpenAI API密钥：
-   ```
-    OPENAI_API_KEY=sk-xxx
-    OPENAI_BASE_URL=your_openai_base_url
-   ```
+### 2. 配置 OpenAI API
+
+我这边使用的 API 中转平台是 [OhMyGPT](https://next.ohmygpt.com/apis)
+
+请你自行创建一个账号并获取 API 密钥
+
+当你获取到 API 密钥后，创建一个 `.env` 文件(仿照`.env.example`格式)，并在其中添加以下内容：
+
+```
+OPENAI_API_KEY=sk-xxx
+OPENAI_BASE_URL=https://c-z0-api-01.hash070.com/v1
+```
+
+如果你跟我一样使用的是 OhMyGPT 的API，请直接使用我写的 BASE_URL，不要修改，你只需要修改 API_KEY
 
 ## 使用方法
 
-1. 运行应用：
-   ```
+### 启动程序
+
+1. 打开终端（macOS）或命令提示符（Windows）
+2. 进入项目目录
+3. 运行程序：
+   ```bash
    python main.py
    ```
+4. 程序启动后，你会在菜单栏（macOS）或系统托盘（Windows）看到 ✍️ 图标
 
-2. 复制英语作文文本到剪贴板，在末尾添加指令格式：`行为:提示词`
-   
-   例如：
-   - `topic:环境保护` - 生成一篇关于环境保护的作文范例
-   - `rewrite:使用更学术化的语言` - 用更学术化的语言重写剪贴板中的作文
-   - `polish:修正语法错误` - 修正作文中的语法错误并润色
+### 使用指令
 
-3. 应用将自动处理文本，并将结果写回剪贴板
+复制文本到剪贴板，在最后一行添加以下指令之一：
 
-4. 使用 `Command+Shift+F` 快捷键可以暂停/恢复应用
+- `topic` - 生成一篇关于该话题的作文
+- `rewrite` - 重写文章，改进表达
+- `generate` - 在文章基础上添加新内容
+- `cite` - 改写引用并添加哈佛引用格式
 
-## 注意事项
+### 示例
 
-- 此应用需要访问互联网以使用OpenAI服务
-- 确保你的OpenAI API密钥有效且具有足够的配额
-- 应用在系统托盘中显示状态：✅ 就绪 或 ⏳ 处理中 
+1. 生成作文：
+   ```
+   sleep and its connection to cognitive function as we age 
+   topic
+   ```
 
-## 示例
+2. 改写文章：
+   ```
+   As we grow older, many of us experience changes in our sleep patterns. We may wake up more frequently at night, feel less rested, or even suffer from memory lapses during the day. But is this just a natural part of aging, or is there a deeper connection between sleep quality and cognitive decline? Drawing from the findings in the academic paper titled Age-related Changes in the Cognitive Function of Sleep by Edward F. Pace-Schott and Rebecca M.C. Spencer, I will delve into the ways aging impacts both sleep architecture and cognition—and what this means for our overall brain health.
+   rewrite
+   ```
 
-Extreme sports, such as sky diving and skiing are very dangerous and should be banned.
+3. 生成新内容：
+   ```
+   The quick brown fox jumps over the lazy dog.
+   generate
+   ```
 
-To what extent do you agree or disagree?
-topic
+4. 添加引用：
+   ```
+    The quick brown fox jumps over the lazy dog.
+    cite
+   ```
