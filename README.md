@@ -66,6 +66,8 @@ OPENAI_BASE_URL=https://c-z0-api-01.hash070.com/v1
 - `rewrite` - 重写文章，改进表达
 - `generate` - 在文章基础上添加新内容
 - `cite` - 改写引用并添加哈佛引用格式
+- `conclude` - 生成结尾总结
+- `full` - 生成完整的文章，包括标题、正文和结尾总结
 
 ### 示例
 
@@ -97,4 +99,10 @@ OPENAI_BASE_URL=https://c-z0-api-01.hash070.com/v1
     ```
      As we grow older, many of us experience changes in our sleep patterns. We may wake up more frequently at night, feel less rested, or even suffer from memory lapses during the day. But is this just a natural part of aging, or is there a deeper connection between sleep quality and cognitive decline? Drawing from the findings in the academic paper titled Age-related Changes in the Cognitive Function of Sleep by Edward F. Pace-Schott and Rebecca M.C. Spencer, I will delve into the ways aging impacts both sleep architecture and cognition—and what this means for our overall brain health.
      conclude
+    ```
+   
+6. 生成完整文章
+    ```
+     As we grow older, many of us experience changes in our sleep patterns. We may wake up more frequently at night, feel less rested, or even suffer from memory lapses during the day. But is this just a natural part of aging, or is there a deeper connection between sleep quality and cognitive decline? Drawing from the findings in the academic paper titled Age-related Changes in the Cognitive Function of Sleep by Edward F. Pace-Schott and Rebecca M.C. Spencer, I will delve into the ways aging impacts both sleep architecture and cognition—and what this means for our overall brain health.
+     full
     ```

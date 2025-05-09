@@ -89,6 +89,11 @@ def parse_clipboard(content: str) -> Dict[str, str]:
             "content": prompt,
             "behavior": "conclude"
         }
+    elif last_line == "full":
+        return {
+            "content": prompt,
+            "behavior": "full"
+        }
     else:
         return {
             "content": prompt,

@@ -47,6 +47,7 @@ async def main():
     print("- generate - 生成新内容")
     print("- cite - 改写引用并添加哈佛引用格式")
     print("- conclude - 生成结尾段落")
+    print("- full - 生成完整的作文")
     
     try:
         while running:

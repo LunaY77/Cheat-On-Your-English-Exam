@@ -8,7 +8,7 @@ class InputState:
     """The content from clipboard."""
     content: str
     """The behavior type determined from the last line."""
-    behavior: Literal["topic", "rewrite", "generate", "cite", "conclude"]
+    behavior: Literal["topic", "rewrite", "generate", "cite", "conclude", "full"]
 
 @dataclass(kw_only=True)
 class WritingState(InputState):
